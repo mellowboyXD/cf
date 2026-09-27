@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum error_t {E_USAGE = 1, E_NEED_MORE_RAM, E_UNREACHABLE, E_CALC, E_OOB};
+enum error_t { E_USAGE = 1, E_NEED_MORE_RAM, E_UNREACHABLE, E_CALC, E_OOB };
 
 #define ERR_CALC_RESULT ((struct result_t){ 0, 0, E_CALC })
 #define ERR_OOB_RESULT ((struct result_t){ 0, 0, E_OOB })
@@ -60,8 +60,8 @@ struct result_t find_binary_decimal_multiple(uint64_t n)
 				if (c.digit) {
 					if (place > UINT64_MAX - x) {
 						// would overflow: x + place
-                                                free(q);
-                                                free(visited);
+						free(q);
+						free(visited);
 						return ERR_CALC_RESULT;
 					}
 
@@ -74,8 +74,8 @@ struct result_t find_binary_decimal_multiple(uint64_t n)
 				if (read >= 0) {
 					if (place > UINT64_MAX / 10) {
 						// would overflow: 10 * place
-                                                free(q);
-                                                free(visited);
+						free(q);
+						free(visited);
 						return ERR_CALC_RESULT;
 					}
 
@@ -91,11 +91,11 @@ struct result_t find_binary_decimal_multiple(uint64_t n)
 		// append 0
 		uint64_t r0 = (10 * curr.rem) % n;
 		if (!visited[r0]) {
-                        if (write >= n) {
-                                free(q);
-                                free(visited);
-                                return ERR_OOB_RESULT;
-                        }
+			if (write >= n) {
+				free(q);
+				free(visited);
+				return ERR_OOB_RESULT;
+			}
 
 			struct node_t node = { .rem = r0,
 					       .digit = 0,
@@ -107,11 +107,11 @@ struct result_t find_binary_decimal_multiple(uint64_t n)
 		// append 1
 		uint64_t r1 = (10 * curr.rem + 1) % n;
 		if (!visited[r1]) {
-                        if (write >= n) {
-                                free(q);
-                                free(visited);
-                                return ERR_OOB_RESULT;
-                        }
+			if (write >= n) {
+				free(q);
+				free(visited);
+				return ERR_OOB_RESULT;
+			}
 
 			struct node_t node = { .rem = r1,
 					       .digit = 1,
@@ -156,23 +156,27 @@ int main(int argc, char *argv[argc + 1])
 
 	struct result_t result = find_binary_decimal_multiple(n);
 	if (result._error != 0) {
-                switch (result._error) {
-                        case E_NEED_MORE_RAM:
-		                fprintf(stderr, "Could not allocate. Not enough memory space.\n");
-                                break;
-                        case E_UNREACHABLE:
-                                fprintf(stderr, "A supposedly unreacheable block of code was reached.\n");
-                                break;
-                        case E_CALC:
-                                fprintf(stderr, "An overflow occurred during calculation.\n");
-                                break;
-                        case E_OOB:
-                                fprintf(stderr, "An out-of-bounds error occured during calculation.\n");
-                                break;
-                        default:
-                                fprintf(stderr, "An unknown error occured during calculation.\n");
-
-                }
+		switch (result._error) {
+		case E_NEED_MORE_RAM:
+			fprintf(stderr,
+				"Could not allocate. Not enough memory space.\n");
+			break;
+		case E_UNREACHABLE:
+			fprintf(stderr,
+				"A supposedly unreacheable block of code was reached.\n");
+			break;
+		case E_CALC:
+			fprintf(stderr,
+				"An overflow occurred during calculation.\n");
+			break;
+		case E_OOB:
+			fprintf(stderr,
+				"An out-of-bounds error occured during calculation.\n");
+			break;
+		default:
+			fprintf(stderr,
+				"An unknown error occured during calculation.\n");
+		}
 
 		return result._error;
 	}
